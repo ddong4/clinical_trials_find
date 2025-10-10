@@ -15,3 +15,14 @@ Small project developed to connect patients with relevant clinical trials. Given
 3. Design the system architecture and choose appropriate technologies. See [architecture brainstorm](docs/2_tech_stack_options.png)
 4. Create general project structure and set up the development environment.
 5. Implement the core features, including transcript processing and trial matching.
+
+## Getting Started
+
+Please reference [DEVELOPMENT.md](docs/DEVELOPMENT.md)
+
+### Prerequisites
+* Docker
+* WSL (if on Windows)
+
+### Quick Start
+navigate to root folder and `docker compose up`

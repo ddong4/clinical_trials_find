@@ -1,0 +1,26 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/workspace:cached
+    working_dir: /workspace
+    command: uvicorn app.main:app --host 0.0.0.0 --port 4682 --reload
+    ports:
+      - "4682:4682"
+    environment:
+      - PYTHONPATH=/workspace
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app:cached
+    working_dir: /app
+    command: streamlit run streamlit_app/main.py --server.port 6084 --server.address 0.0.0.0
+    ports:
+      - "6084:6084"
+    environment:
+      - PYTHONPATH=/app
