@@ -2,9 +2,16 @@
 
 ## Quick Start
 
+### Development Mode (with hot reload)
 1. **Start all services:**
    ```bash
    docker compose up --build
+   ```
+
+### Production Mode (standalone containers)
+1. **Start all services:**
+   ```bash
+   docker compose -f docker-compose.prod.yml up --build
    ```
 
 2. **Access your applications:**
@@ -12,9 +19,16 @@
    - 📖 **Swagger UI**: http://localhost:4682/docs
    - 🎨 **Streamlit Frontend**: http://localhost:6084
 
+## Docker Structure
+
+### Development Files
+- `backend/Dockerfile.dev` - Development backend with volume mounts
+- `frontend/Dockerfile.dev` - Development frontend with volume mounts
+- `docker-compose.yml` - Development compose with hot reload
+
 ## Development Workflow
 
-### Using VS Code Tasks (Optional)
+### Using VS Code Tasks
 - **Start Services**: `Ctrl+Shift+P` → "Tasks: Run Task" → "Docker Compose Up"
 - **Stop Services**: `Ctrl+Shift+P` → "Tasks: Run Task" → "Docker Compose Down"
 - **Restart Backend**: `Ctrl+Shift+P` → "Tasks: Run Task" → "Restart Backend Service"
@@ -22,47 +36,47 @@
 
 ### Manual Commands
 ```bash
-# Start all services
+# Development mode
 docker compose up --build
-
-# Stop all services
 docker compose down
 
-# Restart specific service
+# Production mode  
+docker compose -f docker-compose.prod.yml up --build
+docker compose -f docker-compose.prod.yml down
+
+# Restart specific service (dev)
 docker compose restart backend
 docker compose restart frontend
 
 # View logs
 docker compose logs -f backend
 docker compose logs -f frontend
-
-# Rebuild and restart
-docker compose up --build --force-recreate
 ```
 
 ## Hot Reload
-- **Backend**: FastAPI runs with `--reload` flag, so changes to `.py` files will automatically restart the server
-- **Frontend**: Streamlit automatically detects changes and prompts to rerun
+- **Development**: Both FastAPI and Streamlit run with hot reload via volume mounts
 
 ## File Structure
 ```
 ├── backend/
-│   ├── Dockerfile
+│   ├── Dockerfile          # Production
+│   ├── Dockerfile.dev      # Development  
 │   ├── requirements.txt
 │   └── app/
 │       └── main.py
 ├── frontend/
-│   ├── Dockerfile
+│   ├── Dockerfile          # Production
+│   ├── Dockerfile.dev      # Development
 │   ├── requirements.txt
 │   └── streamlit_app/
 │       └── main.py
-├── docker-compose.yml
+├── docker-compose.yml      # Development
+├── docker-compose.prod.yml # Production
 └── .vscode/
     ├── settings.json
     ├── extensions.json
     └── tasks.json
 ```
 
-## Ports
-- Backend (FastAPI): 4682 → 8000 (container)
-- Frontend (Streamlit): 6084 → 8501 (container)
+## CI/CD
+The GitHub workflow builds production images from the `Dockerfile` files and pushes them to GitHub Container Registry.

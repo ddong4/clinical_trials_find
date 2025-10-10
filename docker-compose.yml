@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     volumes:
       - ./backend:/workspace:cached
     working_dir: /workspace
@@ -15,7 +15,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     volumes:
       - ./frontend:/app:cached
     working_dir: /app

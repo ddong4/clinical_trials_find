@@ -1,4 +1,4 @@
-# Frontend Production Dockerfile
+# Frontend Dockerfile
 FROM python:3.11-slim
 
 # Install system dependencies
@@ -8,21 +8,13 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Copy and install requirements first (for better caching)
+# Copy and install requirements
 COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# Copy application code
-COPY . .
-
-# Create non-root user
-RUN useradd -m -s /bin/bash appuser && \
-    chown -R appuser:appuser /app
-USER appuser
-
 # Expose port
 EXPOSE 8501
 
-# Default command - production server
+# Default command (can be overridden in docker-compose)
 CMD ["streamlit", "run", "streamlit_app/main.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
