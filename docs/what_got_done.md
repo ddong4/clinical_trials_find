@@ -5,11 +5,12 @@ Time Breakdown
 * 30 min - github actions to send to ghcr and then self-hosting
     * ghcr.io/ddong4/clinical_trials_find-backend:main
     * ghcr.io/ddong4/clinical_trials_find-frontend:main
-
 * 30 min - gemini responses. Using flash because $. This gave lots of null responses, so added in simple retry
 * 15 min - made transcript simulation based off of user journey setup with chatgpt https://chatgpt.com/share/68e8842b-ce4c-8006-8821-0cfb8bff9f54
 * 30 min - Figuring out clinical trials API. Started by viewing request done for a basic search on website, see Loose Notes below
-* 30 min - Extracting keywords from transcript. For now, get diagnosis
+* 30 min - Extracting keywords from transcript. For now, getting diagnosis is most important
+* 15 min - Hook up with Frontend, display response
+* 15 min - Configure my reverse proxy and cloudflare to expose website
 
 # Loose Notes
 ## Clinical Trials API

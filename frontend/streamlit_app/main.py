@@ -63,5 +63,27 @@ def main():
     transcript_content = st.session_state.get('transcript_content', '')
     transcript = st.text_area("Or paste your own transcript here", value=transcript_content, height=300)
 
+    # TODO: refactor backend call, should not be in line
+    # Add button to call /extract API
+    if st.button("Extract Medical Info from Transcript"):
+        if transcript.strip():
+            backend_url = "http://backend:8000/extract"  # Use service name for Docker
+            payload = {"transcript": transcript}
+            with st.spinner("Extracting medical info..."):
+                try:
+                    response = requests.post(backend_url, json=payload, timeout=60)
+                    if response.status_code == 200:
+                        result = response.json()
+                        st.success("Extraction Result:")
+                        st.write(result)
+                    else:
+                        st.error(f"Error: {response.status_code} - {response.text}")
+                except requests.exceptions.ConnectionError:
+                    st.error("Could not connect to the backend. Make sure the backend service is running.")
+                except Exception as e:
+                    st.error(f"An error occurred: {str(e)}")
+        else:
+            st.warning("Please enter or load a transcript before extracting.")
+
 if __name__ == "__main__":
     main()
