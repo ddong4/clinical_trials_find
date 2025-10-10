@@ -1,3 +1,5 @@
+import os
+
 import requests
 import streamlit as st
 
@@ -42,8 +44,24 @@ def main():
     st.divider()
     
     st.header("Patient Interview Transcript")
-    transcript = st.file_uploader("Upload a transcript file", type=["txt"])
-    transcript_alt = st.text_area("Or paste the transcript here", height=200)
+    
+    
+    # Add Try It Out button
+    col1, col2 = st.columns([2, 4])
+    with col1:
+        if st.button("Try Our Example!"):
+            try:
+                example_file_path = "streamlit_app/assets/foot_transcript_example.txt"
+                if os.path.exists(example_file_path):
+                    with open(example_file_path, 'r', encoding='utf-8') as file:
+                        st.session_state.transcript_content = file.read()
+                else:
+                    st.error("Example transcript file not found.")
+            except Exception as e:
+                st.error(f"Error loading example transcript: {str(e)}")
+    
+    transcript_content = st.session_state.get('transcript_content', '')
+    transcript = st.text_area("Or paste your own transcript here", value=transcript_content, height=300)
 
 if __name__ == "__main__":
     main()
