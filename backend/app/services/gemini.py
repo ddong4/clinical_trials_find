@@ -78,15 +78,13 @@ class GeminiService:
         """
         Generate response using Gemini API
         """
-        # Convert messages to a simple content string for now
-        # TODO: use this as basis for transcript read
         content = messages[-1].get("content", "") if messages else ""
         
         response = self.client.models.generate_content(
             model="gemini-2.5-flash",
             contents=content,
             config=types.GenerateContentConfig(
-                max_output_tokens=1024,
+                max_output_tokens=10000,
             ),
         )
         
