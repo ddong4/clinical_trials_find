@@ -1,0 +1,31 @@
+Doctor: Hi Joe, heard you've been having foot pain. Can you show me where?
+
+Patient: Yeah, it’s mostly on the bottom of my left foot, right near the heel. It’s kind of a sharp, stabbing pain when I first get up in the morning or after sitting for a while. Then it eases up a bit once I start walking, but lately it’s been lingering longer than before.
+
+Doctor: Is it hurting right now? Ok if I touch it?
+
+Patient: It’s a little sore right now, yeah, but not as bad as first thing in the morning. And sure, go ahead. It’s usually most tender right around that inside part of the heel.
+
+Doctor: Yeah, I see... sorry you're wincing a bit as I'm pulling your feet up. Your Achilles is tight too. It says here in your intake notes that you work a desk job. What company? Do you get a chance to stretch your legs during the work day?
+
+Patient: I work for a software company—mostly sitting in front of a screen all day. I try to get up once or twice an hour, but some days I forget and just stay at the desk for long stretches. I haven’t really been doing any regular stretching.
+
+Doctor: I see, pain 4/5 on the left side. And do you also feel some on the right?
+
+Patient: A little bit, yeah, but nothing compared to the left. The right side just feels kind of tight sometimes, not really painful. The left heel’s the one that really flares up.
+
+Doctor: Ok, let me pull up your xray. It looks normal. Maybe the beginnings of a heel spur right here but it's really small. Other than not stretching, have you tried anything? Like, new shoes?
+
+Patient: Yeah, I bought a pair of running shoes a few weeks ago—ones with more cushioning—but I’m not sure they’ve helped much. I also tried some over-the-counter gel heel inserts, but the pain’s still there, especially first thing in the morning. Haven’t done much else beyond that.
+
+Doctor: I'm looking at your shoes right now but don't see the orthotics. You said the pain's pretty bad first thing, I'm guessing now in the afternoon it's better?
+
+Patient: Yeah, exactly. When I first get out of bed it’s the worst—feels like stepping on a bruise or a knife for the first few steps. By now it’s more of a dull ache, mostly if I’ve been on my feet a lot or walked the dog longer than usual.
+
+Doctor: Got it, so your heel pain is what we call plantar fasciitis. With some good stretching, ice, and maybe some custom orthotics, we can get you back to walking your dog without pain. Let me get you our handouts. Do you want to work with one of our physical therapists? They can show you the exercises. Since you tried over the counter inserts, keep them on -- however I'll give you a number where you can get custom-made ones that could help a lot more. Another thing that helps are night splints, but can get quite uncomfortable since they get your feet pointing up while you sleep. You can also try the sock version, which feels a bit better. Try these things, and come back in 4 weeks if the pain still persists.
+
+Patient: Sounds good, thank you. I’d like to try working with the physical therapist—I think it’d help to make sure I’m doing the stretches right. I’ll stick with the inserts for now and look into the custom ones too. And I’ll give the night splint a try if it doesn’t start easing up.
+
+Doctor: Right, I've heard great things about the night splint, I'll have our assistant show you a few amazon links for them. They're cheap, like $20
+
+Patient: Okay, that works. I’ll check them out and pick one up tonight. Thanks for walking me through all that—it’s been getting frustrating not being able to walk the dog comfortably, so hopefully this helps.
