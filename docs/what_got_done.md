@@ -5,3 +5,5 @@ Time Breakdown
 * 30 min - github actions to send to ghcr and then self-hosting
     * ghcr.io/ddong4/clinical_trials_find-backend:main
     * ghcr.io/ddong4/clinical_trials_find-frontend:main
+
+* 30 min - gemini responses. Using flash because $. This gave lots of null responses, so added in simple retry

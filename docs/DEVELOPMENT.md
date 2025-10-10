@@ -1,5 +1,9 @@
 # Development Setup
 
+## Prerequisites
+- VSCode preferred (have suggested extensions and tasks)
+- Docker Desktop
+
 ## Quick Start
 
 ### Development Mode (with hot reload)
@@ -7,17 +11,6 @@
    ```bash
    docker compose up --build
    ```
-
-### Production Mode (standalone containers)
-1. **Start all services:**
-   ```bash
-   docker compose -f docker-compose.prod.yml up --build
-   ```
-
-2. **Access your applications:**
-   - 🚀 **FastAPI Backend**: http://localhost:4682
-   - 📖 **Swagger UI**: http://localhost:4682/docs
-   - 🎨 **Streamlit Frontend**: http://localhost:6084
 
 ## Docker Structure
 
@@ -62,6 +55,7 @@ docker compose logs -f frontend
 │   ├── Dockerfile          # Production
 │   ├── Dockerfile.dev      # Development  
 │   ├── requirements.txt
+│   ├── .env                # Add your API Keys (like .env.example)
 │   └── app/
 │       └── main.py
 ├── frontend/
@@ -71,7 +65,6 @@ docker compose logs -f frontend
 │   └── streamlit_app/
 │       └── main.py
 ├── docker-compose.yml      # Development
-├── docker-compose.prod.yml # Production
 └── .vscode/
     ├── settings.json
     ├── extensions.json
