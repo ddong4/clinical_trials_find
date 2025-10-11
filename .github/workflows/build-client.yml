@@ -1,0 +1,38 @@
+name: Build openapi_client package
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'clinical_trials_client/**'
+      - '.github/workflows/build-client.yml'
+  workflow_dispatch: {}
+
+jobs:
+  build-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Build wheel and sdist
+        working-directory: clinical_trials_client
+        run: |
+          python -m build --wheel --sdist
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi_client_dist
+          path: clinical_trials_client/dist/*
+          if-no-files-found: error
