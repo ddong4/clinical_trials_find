@@ -1,26 +1,29 @@
-# Backend Dockerfile
+# ---------- Stage 1: Build clinical_trials_client wheel ----------
+FROM python:3.11-slim AS client-builder
+WORKDIR /client
+RUN apt-get update && apt-get install -y git curl build-essential && rm -rf /var/lib/apt/lists/*
+# Copy client source from project root (compose build context must be `.`)
+COPY clinical_trials_client /client/clinical_trials_client
+RUN pip install --upgrade pip wheel setuptools && \
+    cd clinical_trials_client && \
+    python setup.py bdist_wheel
+
+# ---------- Stage 2: Main backend app ----------
 FROM python:3.11-slim
+WORKDIR /workspace/backend
+RUN apt-get update && apt-get install -y git curl build-essential && rm -rf /var/lib/apt/lists/*
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# Copy backend code only
+COPY backend/ /workspace/backend/
 
-# Set working directory
-WORKDIR /workspace
+# Copy built wheel from client-builder stage and install dependencies
+COPY --from=client-builder /client/clinical_trials_client/dist/ /tmp/dist/
+RUN ls -l /tmp/dist && \
+    pip install --upgrade pip && \
+    pip install /tmp/dist/*.whl && \
+    pip install -r requirements.txt && \
+    pip install pylint pytest
 
-# Copy and install requirements
-COPY requirements.txt /tmp/backend-requirements.txt
-RUN pip install --upgrade pip && \
-    pip install -r /tmp/backend-requirements.txt
-
-# Install development tools
-RUN pip install pylint pytest
-
-# Expose port
 EXPOSE 8000
 
-# Default command - start FastAPI dev server
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
