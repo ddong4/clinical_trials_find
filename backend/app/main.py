@@ -4,6 +4,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from app.api.studies import router as studies_router
 from app.core.config import settings
 from app.models.extraction import (
     TranscriptExtractionRequest,
@@ -28,6 +29,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(studies_router)
 
 @app.get("/")
 async def root():
