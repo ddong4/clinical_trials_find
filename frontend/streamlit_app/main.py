@@ -1,4 +1,5 @@
 import os
+import time
 
 import pandas as pd
 import requests
@@ -42,54 +43,85 @@ def main():
     transcript_content = st.session_state.get('transcript_content', '')
     transcript = st.text_area("Or paste your own transcript here", value=transcript_content, height=300)
 
-    # TODO: refactor backend call, should not be in line
-    # Add button to call /extract API
-    if st.button("Extract Medical Info from Transcript"):
+    # Combined process: Extract Medical Info and Find Studies
+    if st.button("🔍 Extract Medical Info & Find Clinical Trials"):
         if transcript.strip():
-            backend_url = "http://backend:8000/extract"  # Use service name for Docker
-            payload = {"transcript": transcript}
-            with st.spinner("Extracting medical info..."):
-                try:
-                    response = requests.post(backend_url, json=payload, timeout=60)
-                    if response.status_code == 200:
-                        result = response.json()
-                        st.session_state.extraction_result = result
-                        st.success("Completed Extraction!")
-                    else:
-                        st.error(f"Error: {response.status_code} - {response.text}")
-                except requests.exceptions.ConnectionError:
-                    st.error("Could not connect to the backend. Make sure the backend service is running.")
-                except Exception as e:
-                    st.error(f"An error occurred: {str(e)}")
-        else:
-            st.warning("Please enter or load a transcript before extracting.")
-
-    # New section: Get studies based on extracted info
-    st.header("Find Clinical Trials")
-    if st.button("Find Studies Based on Extracted Info"):
-        extraction_result = st.session_state.get('extraction_result')
-        if extraction_result and 'extraction' in extraction_result:
-            # Use the first extracted condition for demo
-            condition = extraction_result['extraction']['diagnosis']
-            if condition:
-                studies_url = f"http://backend:8000/studies?condition={condition}&is_recruiting=true&page_size=10"
-                with st.spinner(f"Searching studies for: {condition}"):
-                    try:
-                        studies_response = requests.get(studies_url, timeout=60)
-                        if studies_response.status_code == 200:
-                            studies_result = studies_response.json()
-                            st.session_state.studies_result = studies_result
-                            st.success("Found Top 10 Studies!")
+            # Initialize progress bar
+            progress_bar = st.progress(0)
+            
+            try:
+                with st.status("Starting extraction and trial search...", expanded=True) as status:
+                    # Step 1: Extract medical information (13 seconds)
+                    status.update(label="Extracting medical information from transcript...", state="running")
+                    st.write("AI Extraction in progress...")
+                    progress_bar.progress(10)
+                    backend_url = "http://backend:8000/extract"
+                    payload = {"transcript": transcript}
+                    import threading
+                    response_container = {'response': None, 'error': None}
+                    def make_request():
+                        try:
+                            response_container['response'] = requests.post(backend_url, json=payload, timeout=60)
+                        except Exception as e:
+                            response_container['error'] = e
+                    thread = threading.Thread(target=make_request)
+                    thread.start()
+                    for i in range(10, 90, 2):
+                        if not thread.is_alive():
+                            break
+                        progress_bar.progress(i)
+                        time.sleep(0.3)
+                    thread.join()
+                    if response_container['error']:
+                        status.update(label="❌ Error extracting medical info", state="error")
+                        raise response_container['error']
+                    response = response_container['response']
+                    if response.status_code != 200:
+                        status.update(label=f"❌ Error extracting medical info: {response.status_code}", state="error")
+                        st.error(f"Error extracting medical info: {response.status_code} - {response.text}")
+                        return
+                    result = response.json()
+                    st.session_state.extraction_result = result
+                    progress_bar.progress(90)
+                    status.update(label="✅ Medical information extracted!", state="running")
+                    # Step 2: Find studies based on extracted info (1 second)
+                    if 'extraction' in result:
+                        condition = result['extraction']['diagnosis']
+                        if condition:
+                            status.update(label=f"Finding clinical trials for: {condition}", state="running")
+                            st.write(f"Extracted Diagnosis: {condition}")
+                            studies_url = f"http://backend:8000/studies?condition={condition}&is_recruiting=true&page_size=10"
+                            for i in range(90, 100, 2):
+                                progress_bar.progress(i)
+                                time.sleep(0.05)
+                            studies_response = requests.get(studies_url, timeout=60)
+                            if studies_response.status_code == 200:
+                                studies_result = studies_response.json()
+                                st.session_state.studies_result = studies_result
+                                progress_bar.progress(100)
+                                status.update(label=f"✅ Found {len(studies_result.get('studies', []))} matching clinical trials for: {condition}", state="complete")
+                                st.write(f"Found top {len(studies_result.get('studies', []))} matching studies.")
+                            else:
+                                progress_bar.progress(100)
+                                status.update(label="❌ Error finding studies", state="error")
+                                st.error(f"Error finding studies: {studies_response.status_code} - {studies_response.text}")
                         else:
-                            st.error(f"Error: {studies_response.status_code} - {studies_response.text}")
-                    except Exception as e:
-                        st.error(f"Error fetching studies: {str(e)}")
-            else:
-                st.warning("No medical condition found in extraction result.")
+                            progress_bar.progress(100)
+                            status.update(label="⚠️ No medical condition found in transcript.", state="error")
+                            st.warning("No medical condition found in extraction result.")
+                    else:
+                        progress_bar.progress(100)
+                        status.update(label="⚠️ No extraction data found.", state="error")
+                        st.warning("No extraction data found in response.")
+            except requests.exceptions.ConnectionError:
+                st.error("Could not connect to the backend. Make sure the backend service is running.")
+            except Exception as e:
+                st.error(f"An error occurred: {str(e)}")
         else:
-            st.warning("No extraction result available. Please extract medical info first.")
+            st.warning("Please enter or load a transcript before processing.")
 
-    # New section: Show studies as table if available
+    # Results section: Show studies as table if available
+    st.header("Clinical Trial Results")
     studies_result = st.session_state.get('studies_result')
     if studies_result and 'studies' in studies_result:
         studies = studies_result['studies']
@@ -99,7 +131,6 @@ def main():
             identification = protocol.get('identificationModule', {})
             nct_id = identification.get('nctId', '')
             brief_title = identification.get('briefTitle', '')
-            eligibility = protocol.get('eligibilityModule', {})
             locations_module = protocol.get('contactsLocationsModule', {})
             locations = locations_module.get('locations', [])
             # Serialize locations as a string of city/country or just count
@@ -117,9 +148,9 @@ def main():
                 'Link': link
             })
         df = pd.DataFrame(rows)
-        st.subheader("Studies Table")
+        st.subheader("Matching Studies Table")
         # Render the Link column as clickable hyperlinks
-        st.dataframe(df)
+        st.table(df)
 
     st.markdown("---")
     debug = st.session_state.get('debug', False)
