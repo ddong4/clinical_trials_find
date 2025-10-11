@@ -11,6 +11,7 @@ Time Breakdown
 * 30 min - Extracting keywords from transcript. For now, getting diagnosis is most important
 * 15 min - Hook up with Frontend, display response
 * 15 min - Configure my reverse proxy and cloudflare to expose website
+* 2 hrs - understanding openapi-client codegen and making basic package with clinical trials spec
 
 # Loose Notes
 ## Clinical Trials API
