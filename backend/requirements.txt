@@ -4,3 +4,7 @@ python-dotenv
 pydantic
 pydantic-settings
 google-genai
+# Dependencies for clinical_trials_client
+urllib3 >=2.1.0, <3.0.0
+python-dateutil >=2.8.2
+typing-extensions >=4.7.1
