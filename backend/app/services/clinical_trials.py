@@ -37,7 +37,7 @@ class ClinicalTrialsService:
         return self._studies_api
     
     def search_clinical_trials(
-        self, condition: str, page_size: int, page_token: str | None = None
+        self, condition: str, page_size: int, is_recruiting: bool = False, page_token: str | None = None
     ) -> Dict[str, Any]:
         """
         Search clinical trials by condition
@@ -46,6 +46,7 @@ class ClinicalTrialsService:
             condition: Medical condition to search for
             page_size: Number of results per page
             page_token: Token for pagination
+            is_recruiting: If True, filter to only recruiting studies (RECRUITING, ENROLLING_BY_INVITATION)
             
         Returns:
             Dictionary containing search results
@@ -56,11 +57,18 @@ class ClinicalTrialsService:
         try:
             logger.info(f"Searching clinical trials for condition: {condition}")
             
+            # Set up filters
+            filter_overall_status = []
+            if is_recruiting:
+                filter_overall_status = ["RECRUITING", "ENROLLING_BY_INVITATION"]
+                logger.info("Filtering to recruiting studies only")
+            
             # Perform the search
             response: PagedStudies = self.studies_api.list_studies(
                 query_cond=condition,
                 page_size=page_size,
                 page_token=page_token,
+                filter_overall_status=filter_overall_status,
                 format="json",
             )
             
@@ -84,7 +92,8 @@ def search_clinical_trials(
     condition: str,
     page_size: int,
     page_token: str | None = None,
+    is_recruiting: bool = False,
 ) -> Dict[str, Any]:
     """Convenience wrapper to search clinical trials without managing the service instance."""
     service = ClinicalTrialsService()
-    return service.search_clinical_trials(condition=condition, page_size=page_size, page_token=page_token)
+    return service.search_clinical_trials(condition=condition, page_size=page_size, page_token=page_token, is_recruiting=is_recruiting)

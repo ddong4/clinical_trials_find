@@ -30,7 +30,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(studies_router)
+
 
 @app.get("/")
 async def root():
@@ -67,6 +67,8 @@ async def extract_medical_info(request: TranscriptExtractionRequest):
     except Exception as e:
         logger.error(f"Error in extract endpoint: {e}")
         raise HTTPException(status_code=500, detail=f"Extraction failed: {str(e)}")
+    
+app.include_router(studies_router)
     
 @app.get("/health")
 async def health_check():

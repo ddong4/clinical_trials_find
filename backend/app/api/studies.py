@@ -10,7 +10,8 @@ router = APIRouter()
 def get_studies(
     condition: str = Query(..., description="Condition to search for"),
     page_size: int = Query(10, description="Number of results per page", ge=1, le=100),
-    page_token: str = Query(None, description="Token for pagination")
+    is_recruiting: bool = Query(True, description="Filter to only recruiting studies"),
+    page_token: str = Query(None, description="Token for pagination"),
 ) -> Dict[str, Any]:
     """
     Search for clinical trials by condition.
@@ -18,6 +19,7 @@ def get_studies(
     Args:
         condition: The medical condition to search for
         page_size: Number of results per page (1-100)
+        is_recruiting: Filter to only recruiting studies (RECRUITING, ENROLLING_BY_INVITATION)
         page_token: Token for pagination
         
     Returns:
@@ -37,6 +39,7 @@ def get_studies(
         result = search_clinical_trials(
             condition=condition,
             page_size=page_size,
+            is_recruiting=is_recruiting,
             page_token=page_token
         )
         
