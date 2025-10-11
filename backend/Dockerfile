@@ -16,8 +16,8 @@ RUN pip install --upgrade pip && \
 COPY . .
 
 # Install pre-built clinical_trials_client wheel from artifact
-COPY build_wheels/clinical_trials_client-*.whl /tmp/
-RUN pip install /tmp/clinical_trials_client-*.whl
+COPY build_wheels/ /tmp/wheels/
+RUN pip install /tmp/wheels/*.whl
 
 # Create non-root user
 RUN useradd -m -s /bin/bash appuser && \
