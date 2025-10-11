@@ -54,8 +54,7 @@ def main():
                     if response.status_code == 200:
                         result = response.json()
                         st.session_state.extraction_result = result
-                        st.success("Extraction Result:")
-                        st.write(result)
+                        st.success("Completed Extraction!")
                     else:
                         st.error(f"Error: {response.status_code} - {response.text}")
                 except requests.exceptions.ConnectionError:
@@ -80,8 +79,7 @@ def main():
                         if studies_response.status_code == 200:
                             studies_result = studies_response.json()
                             st.session_state.studies_result = studies_result
-                            st.success("Matching Studies:")
-                            st.write(studies_result)
+                            st.success("Found Top 10 Studies!")
                         else:
                             st.error(f"Error: {studies_response.status_code} - {studies_response.text}")
                     except Exception as e:
@@ -122,6 +120,22 @@ def main():
         st.subheader("Studies Table")
         # Render the Link column as clickable hyperlinks
         st.dataframe(df)
+
+    st.markdown("---")
+    debug = st.session_state.get('debug', False)
+    debug_toggle = st.checkbox("Show Debug Info", value=debug, key="debug_toggle")
+    st.session_state['debug'] = debug_toggle
+
+    if st.session_state['debug']:
+        extraction_result = st.session_state.get('extraction_result')
+        if extraction_result:
+            st.write("[DEBUG] Extraction Result:")
+            st.write(extraction_result)
+
+        studies_result = st.session_state.get('studies_result')
+        if studies_result:
+            st.write("[DEBUG] Studies Result:")
+            st.write(studies_result)
 
 if __name__ == "__main__":
     main()
