@@ -33,23 +33,6 @@ app.add_middleware(
 async def root():
     return {"message": "Welcome to StudyBridge API"}
 
-@app.get("/health")
-async def health_check():
-    return {
-        "status": "healthy"
-    }
-
-@app.get("/config")
-async def get_config():
-    """Debug endpoint to check configuration (hide sensitive data)"""
-    return {
-        "app_name": settings.app_name,
-        "debug": settings.debug,
-        "allowed_hosts": settings.allowed_hosts,
-        "gemini_key_configured": settings.gemini_key is not None,
-        "gemini_key_length": len(settings.gemini_key) if settings.gemini_key else 0
-    }
-
 class PromptRequest(BaseModel):
     prompt: str
 
@@ -81,3 +64,9 @@ async def extract_medical_info(request: TranscriptExtractionRequest):
     except Exception as e:
         logger.error(f"Error in extract endpoint: {e}")
         raise HTTPException(status_code=500, detail=f"Extraction failed: {str(e)}")
+    
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "healthy"
+    }

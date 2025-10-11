@@ -69,8 +69,6 @@ class GeminiService:
         
         # Set the API key for the Google client (it expects GEMINI_API_KEY)
         os.environ["GEMINI_API_KEY"] = settings.gemini_key
-        
-        # The client automatically gets the API key from GEMINI_API_KEY environment variable
         self.client = genai.Client()
     
     @retry_on_null_response(max_retries=3, delay=0.5)
@@ -89,13 +87,3 @@ class GeminiService:
         )
         
         return response.text
-    
-    def is_configured(self) -> bool:
-        """Check if the service is properly configured"""
-        return settings.gemini_key is not None
-
-
-# Example of how to use it in an endpoint
-def get_gemini_service() -> GeminiService:
-    """Dependency function to get configured Gemini service"""
-    return GeminiService()
