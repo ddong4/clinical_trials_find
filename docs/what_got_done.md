@@ -13,7 +13,7 @@ Time Breakdown
 * 15 min - Configure my reverse proxy and cloudflare to expose website
 * 2 hrs - understanding openapi-client codegen and making basic package with clinical trials spec
 * 30 min - getting build to work with local py package
-* 30 min - Add in integration backend and frontend, put in dataframe some elementary results
+* 30 min - Add in integration backend and frontend, put in dataframe and show top <=10 results
 
 # Loose Notes
 ## Clinical Trials API
