@@ -39,7 +39,7 @@ async def root():
 class PromptRequest(BaseModel):
     prompt: str
 
-@app.post("/generate")
+@app.post("/completions")
 async def generate_text(request: PromptRequest):
     """Generate text using Gemini API"""
     try:
@@ -52,7 +52,7 @@ async def generate_text(request: PromptRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/extract", response_model=TranscriptExtractionResponse)
+@app.post("/transcripts/extractions", response_model=TranscriptExtractionResponse)
 async def extract_medical_info(request: TranscriptExtractionRequest):
     """Extract structured medical information from a transcript"""
     try:

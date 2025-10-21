@@ -55,7 +55,7 @@ def main():
                     status.update(label="Extracting medical information from transcript...", state="running")
                     st.write("AI Extraction in progress...")
                     progress_bar.progress(10)
-                    backend_url = "http://backend:8000/extract"
+                    backend_url = "http://backend:8000/transcripts/extractions"
                     payload = {"transcript": transcript}
                     import threading
                     response_container = {'response': None, 'error': None}
